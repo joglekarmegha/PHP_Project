@@ -1,3 +1,2 @@
-FROM devopsedu/webapp
+FROM php:7.2-apache
 COPY . /var/www/html
-RUN apt-get update -y
