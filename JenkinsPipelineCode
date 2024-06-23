@@ -16,7 +16,7 @@ pipeline {
         }    
 		stage('Docker Build') {
       steps {
-        sh 'docker build -t omsairam9/docker_image:latest ${Workspace}'
+        sh 'docker build -t omsairam9/docker_image:latest ${WORKSPACE}'
       }
     }
         stage('Docker Push') {
