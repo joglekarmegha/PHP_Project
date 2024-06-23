@@ -27,12 +27,7 @@ pipeline {
         }
       }
     }
-    stage('Build Test Server'){
-        steps{
-            sh "echo 'Build the Test server'"
-            sh "ansible-playbook /home/devopsadmin/Playbooks/docker.yml"
-        }
-    }
+   
     stage('Deploy image on Test Server'){
         steps{
             sh "docker pull omsairam9/docker_image:latest"
