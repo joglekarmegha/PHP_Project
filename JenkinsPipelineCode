@@ -14,23 +14,18 @@ pipeline {
 				git 'https://github.com/joglekarmegha/PHP_Project.git'
             }
         }    
-		stage('Building image') {steps{script {dockerImage = docker.build imagename}}
-		}
-        stage('Deploy Image') {
-            steps{
-                script {
-                    docker.withRegistry( '', registryCredential ) 
-                    {dockerImage.push("$BUILD_NUMBER")
-                    dockerImage.push('latest')
-                    }
-                }
-            }
+		stage('Docker Build') {
+      steps {
+        sh 'docker build -t omsairam9/docker_image:latest ${Workspace}'
+      }
+    }
+        stage('Docker Push') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerloginid', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          sh 'docker push omsairam9/docker_image:latest'
         }
-        stage('Remove Unused docker image') {
-            steps{
-                sh "docker rmi $imagename:$BUILD_NUMBER"
-                sh "docker rmi $imagename:latest"
-            }
-        }
+      }
+    }
     }
 }
