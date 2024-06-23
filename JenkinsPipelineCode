@@ -1,0 +1,36 @@
+pipeline {
+    environment {
+    registry = "omsairam9/phpimage"
+    registryCredential = 'dockerloginid'
+    dockerImage = ''
+  }
+
+    agent { label 'Slave_Node1' }
+	
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM Checkout'
+				git 'https://github.com/joglekarmegha/PHP_Project.git'
+            }
+        }    
+		stage('Building image') {steps{script {dockerImage = docker.build imagename}}
+		}
+        stage('Deploy Image') {
+            steps{
+                script {
+                    docker.withRegistry( '', registryCredential ) 
+                    {dockerImage.push("$BUILD_NUMBER")
+                    dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+        stage('Remove Unused docker image') {
+            steps{
+                sh "docker rmi $imagename:$BUILD_NUMBER"
+                sh "docker rmi $imagename:latest"
+            }
+        }
+    }
+}
