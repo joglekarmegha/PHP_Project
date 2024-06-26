@@ -16,22 +16,22 @@ pipeline {
         }    
 		stage('Docker Build') {
       steps {
-        sh 'docker build -t omsairam9/docker_image:latest ${WORKSPACE}'
+        sh 'docker build -t omsairam9/php_image:latest ${WORKSPACE}'
       }
     }
         stage('Docker Push') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerloginid', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
           sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker push omsairam9/docker_image:latest'
+          sh 'docker push omsairam9/php_image:latest'
         }
       }
     }
    
     stage('Deploy image on Test Server'){
         steps{
-            sh "docker pull omsairam9/docker_image:latest"   
-            sh "nohup docker run -itd -p 8081:80 omsairam9/docker_image:latest &"
+            sh "docker pull omsairam9/php_image:latest"   
+            sh "nohup docker run -itd -p 8081:80 omsairam9/php_image:latest &"
         }
     }
     }
