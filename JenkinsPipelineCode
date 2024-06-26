@@ -30,8 +30,7 @@ pipeline {
    
     stage('Deploy image on Test Server'){
         steps{
-            sh "docker pull omsairam9/docker_image:latest"
-          
+            sh "docker pull omsairam9/docker_image:latest"   
             sh "nohup docker run -itd -p 8081:80 omsairam9/docker_image:latest &"
         }
     }
