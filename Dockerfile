@@ -1,4 +1,5 @@
-FROM devopsedu/webapp
+#FROM devopsedu/webapp
+FROM php:7.2-apache
 COPY . /var/www/html
 CMD apachectl -D FOREGROUND
 EXPOSE 80
